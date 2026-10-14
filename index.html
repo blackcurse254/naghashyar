@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>نقاش‌یار</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#eef3f2;--card:#fff;--tx:#10231f;--mu:#5d7771;--ac:#0f766e;--ac2:#fff;--hl:#f59e0b;--bd:#dbe6e3;--er:#dc2626;--sh:0 2px 10px rgba(15,60,55,.08);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b1715;--card:#12231f;--tx:#e7f3f0;--mu:#8fb0a9;--ac:#2dd4bf;--ac2:#052e2a;--hl:#fbbf24;--bd:#21403a;--sh:0 2px 10px rgba(0,0,0,.4)}}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.7 "Vazirmatn",Tahoma,system-ui,sans-serif;padding:0 14px 110px;max-width:640px;margin-inline:auto}
+h2{font-size:20px;font-weight:800;margin:18px 0 10px}h3{font-size:15px;font-weight:800;margin:0 0 8px}
+.c{background:var(--card);border:1px solid var(--bd);border-radius:18px;padding:14px;margin:12px 0;box-shadow:var(--sh)}
+.g{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:8px 0}
+label{display:block;font-size:12px;color:var(--mu);font-weight:600}
+input,select,textarea{width:100%;font:inherit;font-size:15px;padding:10px 12px;border:1.5px solid var(--bd);border-radius:12px;background:var(--bg);color:var(--tx);margin-top:3px;outline:0}
+input:focus,select:focus{border-color:var(--ac)}
+button{font:inherit;border:0;border-radius:12px;padding:10px 14px;background:var(--ac);color:var(--ac2);font-weight:800;cursor:pointer}
+button:active{transform:scale(.97)}
+button.s{background:transparent;color:var(--er);padding:4px 8px;font-weight:600}
+button.o{background:transparent;color:var(--ac);border:1.5px solid var(--ac)}
+.hero{background:linear-gradient(135deg,#0f766e,#115e59 55%,#164e63);color:#fff;border-radius:22px;padding:16px;margin-top:10px;box-shadow:0 8px 24px rgba(15,118,110,.3)}
+.hero .t{display:flex;justify-content:space-between;align-items:center}
+.hero b.n{font-size:19px;font-weight:800}.hero .mu{color:#b8e6df}
+.hero button{background:rgba(255,255,255,.18);color:#fff;padding:6px 12px}
+.st{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.st div{background:rgba(255,255,255,.14);border-radius:14px;padding:8px;text-align:center;font-size:11px;color:#c9efe9}
+.st b{display:block;font-size:14px;color:#fff}
+.nav{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:center;padding:8px 12px calc(8px + env(safe-area-inset-bottom,0px));background:var(--card);border-top:1px solid var(--bd);z-index:5}
+.nav div{display:flex;gap:4px;width:100%;max-width:640px}
+.nav button{flex:1;background:transparent;color:var(--mu);font-size:11px;padding:6px 2px;border-radius:14px;font-weight:600}
+.nav button span{display:block;font-size:20px;line-height:1.2}
+.nav button.on{background:var(--ac);color:var(--ac2)}
+.r{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:4px 0}
+.tot{font-weight:800;color:var(--ac)}.mu{color:var(--mu);font-size:12px}.w{color:var(--er);font-size:12px;background:rgba(220,38,38,.08);padding:6px 10px;border-radius:10px;margin:6px 0}
+.chip{display:inline-block;background:var(--bg);border:1px solid var(--bd);border-radius:20px;padding:2px 10px;margin:3px;font-size:12px}
+.badge{display:inline-block;background:var(--ac);color:var(--ac2);border-radius:10px;padding:0 10px;font-size:11px;margin-inline-end:6px}
+.bar{height:6px;border-radius:6px;background:var(--bd);overflow:hidden;margin-top:8px}.bar i{display:block;height:100%;background:var(--hl)}
+.done{opacity:.55}.done .nm{text-decoration:line-through}
+.sum{background:linear-gradient(135deg,rgba(245,158,11,.14),rgba(15,118,110,.1))}
+textarea{min-height:130px}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+const $=s=>document.querySelector(s);
+const FD='۰۱۲۳۴۵۶۷۸۹';
+const num=v=>parseFloat(String(v).replace(/[۰-۹]/g,d=>FD.indexOf(d)).replace(/[٫,،]/g,'.'))||0;
+const f=n=>(Math.round(n*100)/100).toLocaleString('fa-IR');
+const T={
+ wall:{n:'دیوار',f:[['L','طول کل دیوارها (m)'],['H','ارتفاع (m)'],['D','کسر در/پنجره (m²)']],a:o=>Math.max(0,o.L*o.H-o.D)},
+ ceil:{n:'سقف',f:[['L','طول (m)'],['W','عرض (m)']],a:o=>o.L*o.W},
+ kanaf:{n:'کناف',f:[['L','طول (m)'],['W','عرض / ارتفاع (m)'],['D','کسر (m²)']],a:o=>Math.max(0,o.L*o.W-o.D)},
+ frame:{n:'چهارچوب و در',f:[['N','تعداد'],['L','طول رنگ‌خور هر عدد (m)'],['W','عرض رنگ‌خور (m)']],a:o=>o.N*o.L*o.W},
+ custom:{n:'دلخواه',f:[['L','طول (m)'],['W','عرض (m)'],['N','تعداد']],a:o=>o.L*o.W*(o.N||1)}
+};
+const toJ=(gy,gm,gd)=>{const g=[0,31,59,90,120,151,181,212,243,273,304,334];const y2=gm>2?gy+1:gy;let d=355666+365*gy+Math.floor((y2+3)/4)-Math.floor((y2+99)/100)+Math.floor((y2+399)/400)+gd+g[gm-1];let jy=-1595+33*Math.floor(d/12053);d%=12053;jy+=4*Math.floor(d/1461);d%=1461;if(d>365){jy+=Math.floor((d-1)/365);d=(d-1)%365}const jm=d<186?1+Math.floor(d/31):7+Math.floor((d-186)/30);return[jy,jm,1+(d<186?d%31:(d-186)%30)]};
+const toG=(jy,jm,jd)=>{jy+=1595;let d=-355668+365*jy+Math.floor(jy/33)*8+Math.floor(((jy%33)+3)/4)+jd+(jm<7?(jm-1)*31:(jm-7)*30+186);let gy=400*Math.floor(d/146097);d%=146097;if(d>36524){gy+=100*Math.floor(--d/36524);d%=36524;if(d>=365)d++}gy+=4*Math.floor(d/1461);d%=1461;if(d>365){gy+=Math.floor((d-1)/365);d=(d-1)%365}let gd=d+1;const m=[0,31,(gy%4==0&&gy%100!=0||gy%400==0)?29:28,31,30,31,30,31,31,30,31,30,31];let gm=0;for(gm=0;gm<13;gm++){if(gd<=m[gm])break;gd-=m[gm]}return[gy,gm,gd]};
+const p2=n=>String(n).padStart(2,'0');
+const jstr=iso=>{const[y,m,d]=iso.split('-').map(Number);const j=toJ(y,m,d);return j[0]+'/'+p2(j[1])+'/'+p2(j[2])};
+const pj=t=>{const a=String(t).replace(/[۰-۹]/g,d=>FD.indexOf(d)).split(/[\/\-.]/).map(Number);if(a.length!=3||a.some(isNaN)||a[1]<1||a[1]>12||a[2]<1||a[2]>31)return null;const g=toG(a[0],a[1],a[2]);return g[0]+'-'+p2(g[1])+'-'+p2(g[2])};
+const jin=(id,l,iso)=>`<label>${l}<input id="${id}" data-j="${id}" inputmode="decimal" placeholder="۱۴۰۵/۰۷/۲۲" value="${jstr(iso)}"></label>`;
+const STEPS=[['آماده‌سازی و پوشاندن',80,0],['بتونه دست اول',40,1],['سنباده',60,0],['بتونه دست دوم',40,1],['سنباده نهایی',60,0],['آستر',100,1],['رنگ دست اول',80,1],['رنگ دست دوم',80,1]];
+let S={ps:[],cur:null,tab:0};
+try{S=Object.assign(S,JSON.parse(localStorage.getItem('ny1')||'{}'))}catch(e){}
+const save=()=>{try{localStorage.setItem('ny1',JSON.stringify(S))}catch(e){}};
+const P=()=>S.ps.find(p=>p.id===S.cur);
+let _x;const today=()=>{const d=new Date();return d.getFullYear()+'-'+p2(d.getMonth()+1)+'-'+p2(d.getDate())};
+const fd=d=>new Intl.DateTimeFormat('fa-IR-u-ca-persian',{weekday:'short',month:'long',day:'numeric'}).format(d);
+const fdy=s=>jstr(s).replace(/\d/g,d=>FD[d]);
+function newP(){const p={id:Date.now(),nm:'پروژه جدید',cl:'',ad:'',items:[],start:today(),hol:1,steps:STEPS.map((s,i)=>({n:s[0],r:s[1],d:s[2],ok:0})),apps:[],tx:[],pr:{paint:0,primer:0,putty:0,pc:10,rc:10,pk:0.5,ws:5,profit:15}};S.ps.push(p);S.cur=p.id;S.tab=0;}
+function calc(p){
+ let area=0,paint=0,primer=0,putty=0,wage=0;const k=1+(p.pr.ws||0)/100;
+ p.items.forEach(o=>{const a=T[o.t].a(o);o.a=a;area+=a;paint+=a*o.co/(p.pr.pc||10);primer+=a*o.pm/(p.pr.rc||10);putty+=a*o.pt*p.pr.pk;wage+=a*o.w;});
+ paint*=k;primer*=k;putty*=k;
+ const mat=paint*p.pr.paint+primer*p.pr.primer+putty*p.pr.putty;
+ const aw=p.apps.reduce((s,a)=>s+a.days.length*a.wage,0);
+ const cost=mat+wage+aw,total=cost*(1+p.pr.profit/100);
+ const inc=p.tx.filter(t=>t.k=='in').reduce((s,t)=>s+t.v,0),exp=p.tx.filter(t=>t.k=='out').reduce((s,t)=>s+t.v,0);
+ return{area,paint,primer,putty,mat,wage,aw,cost,total,inc,exp};
+}
+function sched(p,area){
+ const w=1+p.apps.length;let cur=new Date((p.start>today()?p.start:today())+'T12:00:00');
+ const nw=d=>{while(p.hol&&d.getDay()==5)d.setDate(d.getDate()+1);return d};
+ const out=[];let end=null;
+ p.steps.forEach(s=>{
+  if(s.ok){out.push(null);return}
+  const n=Math.max(1,Math.ceil(area/((s.r||1)*w)));
+  let st=nw(new Date(cur)),e=new Date(st);
+  for(let i=1;i<n;i++){e.setDate(e.getDate()+1);nw(e)}
+  out.push({n,st,e});end=e;
+  cur=new Date(e);cur.setDate(cur.getDate()+1+(s.d||0));
+ });
+ return{out,end};
+}
+const inp=(k,l,v,n=1)=>`<label>${l}<input data-k="${k}" data-n="${n}" ${n?'inputmode="decimal"':''} value="${v??''}"></label>`;
+function render(){
+ const el=$('#app');
+ if(!S.cur||!P()){
+  el.innerHTML=`<div class="hero"><b class="n" style="font-size:22px">🎨 نقاش‌یار</b><div class="mu">دستیار متره، برآورد و حساب کار</div></div>`+(S.ps.length?'':'<p class="mu">هنوز پروژه‌ای نیست.</p>')+S.ps.map(p=>{const c=calc(p);return`<div class="c"><div class="r"><b>${p.nm}</b><span class="mu">${p.cl}</span></div><div class="r mu"><span>${f(c.area)} متر مربع</span><span>${f(c.total)} تومان</span></div><div class="r"><button data-a="open" data-i="${p.id}">باز کردن</button><button class="s" data-a="delp" data-i="${p.id}">حذف</button></div></div>`}).join('')+`<button data-a="newp" style="width:100%">+ پروژه جدید</button>`;
+  return;
+ }
+ const p=P(),c=calc(p);
+ const sc0=sched(p,c.area);const dn=p.steps.filter(x=>x.ok).length,pc=p.steps.length?Math.round(dn/p.steps.length*100):0;
+ let h=`<div class="hero"><div class="t"><b class="n">🎨 ${p.nm}</b><button data-a="home">← پروژه‌ها</button></div><div class="mu">${p.cl||'—'}${p.ad?' | '+p.ad:''}</div><div class="st"><div><b>${f(c.area)}</b>متر مربع</div><div><b>${f(Math.round(c.total/1000))}</b>هزار تومان</div><div><b>${sc0.end?new Intl.DateTimeFormat('fa-IR-u-ca-persian',{month:'short',day:'numeric'}).format(sc0.end):'تمام'}</b>پایان کار</div></div><div class="bar"><i style="width:${pc}%"></i></div></div>`;
+ h+=`<div class="nav"><div>`+[['📐','متره'],['🗓️','مراحل'],['👷','شاگرد'],['💰','حساب']].map((t,i)=>`<button class="${S.tab==i?'on':''}" data-a="tab" data-i="${i}"><span>${t[0]}</span>${t[1]}</button>`).join('')+'</div></div>';
+ if(S.tab==0){
+  h+=`<div class="c"><div class="g">${inp('nm','نام پروژه',p.nm,0)}${inp('cl','مشتری',p.cl,0)}</div>${inp('ad','آدرس',p.ad,0)}</div>`;
+  p.items.forEach((o,i)=>{const t=T[o.t];h+=`<div class="c"><div class="r"><h3>${t.n}: ${o.nm||''}</h3><button class="s" data-a="deli" data-i="${i}">حذف</button></div>${inp(`items.${i}.nm`,'عنوان (مثلاً هال، اتاق ۱)',o.nm,0)}<div class="g">${t.f.map(x=>inp(`items.${i}.${x[0]}`,x[1],o[x[0]])).join('')}</div><div class="g">${inp(`items.${i}.pt`,'دست بتونه',o.pt)}${inp(`items.${i}.pm`,'دست آستر',o.pm)}${inp(`items.${i}.co`,'دست رنگ',o.co)}${inp(`items.${i}.w`,'اجرت هر متر (تومان)',o.w)}</div><div class="r tot"><span>متراژ</span><span>${f(o.a)} m²</span></div></div>`});
+  h+=`<div class="c"><label>افزودن بخش</label><div class="g">${Object.keys(T).map(k=>`<button class="o" data-a="addi" data-i="${k}">+ ${T[k].n}</button>`).join('')}</div></div>`;
+  h+=`<div class="c sum"><h3>📊 جمع کل</h3><div class="r"><span>متراژ کل</span><b>${f(c.area)} m²</b></div><div class="r"><span>رنگ</span><b>${f(c.paint)} لیتر</b></div><div class="r"><span>آستر</span><b>${f(c.primer)} لیتر</b></div><div class="r"><span>بتونه</span><b>${f(c.putty)} کیلو</b></div><div class="mu">با احتساب ${p.pr.ws}٪ پرت</div></div>`;
+ }
+ if(S.tab==1){
+  const sc=sched(p,c.area);
+  h+=`<div class="c"><div class="g">${jin('start','تاریخ شروع (شمسی)',p.start)}<label>جمعه تعطیل<select data-k="hol" data-n="1"><option value="1" ${p.hol?'selected':''}>بله</option><option value="0" ${p.hol?'':'selected'}>خیر</option></select></label></div><div class="mu">تعداد نفرات: ${1+p.apps.length} (خودت + شاگردها) — متراژ: ${f(c.area)} m²</div></div>`;
+  p.steps.forEach((s,i)=>{const r=sc.out[i];h+=`<div class="c ${s.ok?'done':''}"><div class="r"><label style="display:flex;gap:8px;align-items:center;color:var(--tx);font-size:15px;font-weight:600"><input type="checkbox" style="width:22px;height:22px;margin:0;accent-color:#0f766e" data-k="steps.${i}.ok" data-c="1" ${s.ok?'checked':''}><span class="nm">${s.n}</span></label><span><button class="s" data-a="mv" data-i="${i}">↑</button><button class="s" data-a="dels" data-i="${i}">حذف</button></span></div><div class="g">${inp(`steps.${i}.r`,'بازده (m² در روز برای هر نفر)',s.r)}${inp(`steps.${i}.d`,'روز خشک‌شدن بعدش',s.d)}</div>${r?`<div class="mu">${f(r.n)} روز کار: ${fd(r.st)} تا ${fd(r.e)}</div>`:''}</div>`});
+  h+=`<div class="c"><div class="g">${inp('ns','نام مرحله جدید','',0)}<button data-a="adds" style="align-self:end">+ افزودن مرحله</button></div></div>`;
+  h+=`<div class="c tot">${sc.end?'پایان کار: '+fd(sc.end):'همه مراحل انجام شده ✅'}</div>`;
+ }
+ if(S.tab==2){
+  p.apps.forEach((a,i)=>{const due=a.days.length*a.wage,paid=a.paid||0;h+=`<div class="c"><div class="r"><h3>${a.n}</h3><button class="s" data-a="dela" data-i="${i}">حذف</button></div><div class="g">${inp(`apps.${i}.wage`,'دستمزد روزانه (تومان)',a.wage)}${inp(`apps.${i}.paid`,'پرداخت‌شده (تومان)',paid)}</div><div class="r"><div style="flex:1">${jin('ad'+i,'روز کاری (شمسی)',today())}</div><button style="align-self:end"  data-a="addd" data-i="${i}">+ ثبت</button></div><div>${a.days.slice().sort().map(d=>`<span class="chip">${fdy(d)} <a data-a="deld" data-i="${i}" data-d="${d}" style="color:var(--er)">×</a></span>`).join('')}</div><div class="r"><span>${f(a.days.length)} روز</span><b>${f(due)} تومان</b></div><div class="r tot"><span>مانده حساب</span><span>${f(due-paid)} تومان</span></div></div>`});
+  h+=`<div class="c"><div class="g">${inp('na','نام شاگرد','',0)}${inp('nwg','دستمزد روزانه (تومان)','')}</div><button data-a="adda" style="width:100%;margin-top:8px">+ افزودن شاگرد</button></div><div class="c tot">جمع دستمزد شاگردها: ${f(c.aw)} تومان</div>`;
+ }
+ if(S.tab==3){
+  const z=!p.pr.paint&&!p.pr.primer&&!p.pr.putty;
+  h+=`<div class="c"><h3>قیمت‌ها (از بازار روز وارد کن)</h3>${z?'<div class="w">قیمت مصالح هنوز وارد نشده؛ برای برآورد دقیق پر کن.</div>':''}<div class="g">${inp('pr.paint','رنگ هر لیتر',p.pr.paint)}${inp('pr.primer','آستر هر لیتر',p.pr.primer)}${inp('pr.putty','بتونه هر کیلو',p.pr.putty)}${inp('pr.profit','درصد سود',p.pr.profit)}${inp('pr.pc','پوشش رنگ (m²/لیتر/دست)',p.pr.pc)}${inp('pr.rc','پوشش آستر (m²/لیتر)',p.pr.rc)}${inp('pr.pk','بتونه (کیلو/m²/دست)',p.pr.pk)}${inp('pr.ws','درصد پرت',p.pr.ws)}</div></div>`;
+  const msg=`پیش‌فاکتور ${p.nm}${p.cl?' - '+p.cl:''}\nمتراژ: ${f(c.area)} متر مربع\nمبلغ کل: ${f(Math.round(c.total))} تومان`;
+  h+=`<div class="c"><div class="r"><span>مصالح</span><span>${f(c.mat)}</span></div><div class="r"><span>اجرت</span><span>${f(c.wage)}</span></div><div class="r"><span>شاگرد</span><span>${f(c.aw)}</span></div><div class="r"><span>هزینه تمام‌شده</span><span>${f(c.cost)}</span></div><div class="r tot"><span>قیمت پیشنهادی</span><span>${f(Math.round(c.total))} تومان</span></div><textarea id="q" readonly>${msg}</textarea><button data-a="copy" style="width:100%;margin-top:6px">کپی متن</button></div>`;
+  h+=`<div class="c"><h3>دریافتی و هزینه</h3>${p.tx.map((t,i)=>`<div class="r"><span>${t.k=='in'?'🟢':'🔴'} ${t.n||''}</span><span>${f(t.v)} <button class="s" data-a="delt" data-i="${i}">×</button></span></div>`).join('')}<div class="g">${inp('tn','شرح','',0)}${inp('tv','مبلغ (تومان)','')}</div><div class="g" style="margin-top:8px"><button data-a="addt" data-i="in">+ دریافتی</button><button class="o" data-a="addt" data-i="out">+ هزینه</button></div><div class="r tot" style="margin-top:8px"><span>سود خالص تاکنون</span><span>${f(c.inc-c.exp)} تومان</span></div><div class="mu">دریافتی ${f(c.inc)} | هزینه ${f(c.exp)}</div></div>`;
+ }
+ const act=document.activeElement&&document.activeElement.dataset?document.activeElement.dataset.k:null;
+ el.innerHTML=h;
+}
+const T0={};
+document.addEventListener('change',e=>{
+ if(e.target.dataset.j){if(e.target.dataset.j=='start'){const d=pj(e.target.value);if(d){P().start=d;save()}render()}return}
+ const k=e.target.dataset.k;if(!k)return;
+ if(['ns','na','nwg','tn','tv'].includes(k)){T0[k]=e.target.value;return}
+ const p=P(),a=k.split('.');let o=p;
+ for(let i=0;i<a.length-1;i++)o=o[a[i]];
+ const l=a[a.length-1];
+ o[l]=e.target.dataset.c?(e.target.checked?1:0):(e.target.dataset.n=='1'?num(e.target.value):e.target.value);
+ save();render();
+});
+document.addEventListener('click',e=>{
+ const b=e.target.closest('[data-a]');if(!b)return;
+ const a=b.dataset.a,i=b.dataset.i,p=P();
+ if(a=='newp')newP();
+ else if(a=='open'){S.cur=+i;S.tab=0}
+ else if(a=='home')S.cur=null;
+ else if(a=='delp'){if(confirm('حذف شود؟'))S.ps=S.ps.filter(x=>x.id!=i)}
+ else if(a=='tab')S.tab=+i;
+ else if(a=='addi')p.items.push({t:i,nm:'',L:0,W:0,H:i=='wall'?2.8:0,D:0,N:1,pt:2,pm:1,co:2,w:0});
+ else if(a=='deli')p.items.splice(i,1);
+ else if(a=='adds'){if(T0.ns){p.steps.push({n:T0.ns,r:50,d:0,ok:0});T0.ns=''}}
+ else if(a=='dels')p.steps.splice(i,1);
+ else if(a=='mv'&&i>0){const s=p.steps.splice(i,1)[0];p.steps.splice(i-1,0,s)}
+ else if(a=='adda'){if(T0.na){p.apps.push({n:T0.na,wage:num(T0.nwg),days:[],paid:0});T0.na='';T0.nwg=''}}
+ else if(a=='dela'){if(confirm('حذف شود؟'))p.apps.splice(i,1)}
+ else if(a=='addd'){const d=pj($('#ad'+i).value);if(d&&!p.apps[i].days.includes(d))p.apps[i].days.push(d)}
+ else if(a=='deld')p.apps[i].days=p.apps[i].days.filter(x=>x!=b.dataset.d);
+ else if(a=='addt'){const v=num(T0.tv);if(v){p.tx.push({k:i,n:T0.tn||'',v});T0.tn='';T0.tv=''}}
+ else if(a=='delt')p.tx.splice(i,1);
+ else if(a=='copy'){const q=$('#q');q.select();try{navigator.clipboard.writeText(q.value)}catch(x){document.execCommand('copy')}b.textContent='کپی شد ✓';return}
+ save();render();
+});
+render();
+</script>
+</body>
+</html>
